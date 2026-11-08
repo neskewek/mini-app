@@ -16,7 +16,7 @@
   --heart:#D9557A; --heart-soft:#F8DCE4; --done:#66784A; --done-soft:#E3E8D2; --gold:#B5873C; --gold-soft:#F3E4C6;
   --boss:#3B2A22; --boss-ink:#F8EEE7; --frost:#9DBBCB; --scrim:rgba(40,26,20,.45);
   --skin:#F8DFCF; --skin-d:#EDC6B1; --skin-dd:#C99A86; --hair:#9C7550; --hair-d:#6E5036; --hair-l:#C29C70; --brow:#5A4130; --iris:#5A90CC; --lip:#E08A8C; --lip-d:#C9707A; --top:#D9A49C; --blazer:#2A211F; --shirt:#F3ECE4; --lens:#231B19;
-  --sp-body:#D9744F; --sp-beauty:#DE7A9B; --sp-health:#3F9C92; --sp-mind:#5C86C9; --sp-italy:#5E9E5A; --sp-money:#C1962F; --sp-channel:#9A6FC4; --sp-soul:#6FA0B5; --sp-love:#D2565E; --sp-life:#E39A42; --sp-x:#B5873C;
+  --sp-body:#D9744F; --sp-beauty:#DE7A9B; --sp-health:#3F9C92; --sp-mind:#5C86C9; --sp-italy:#5E9E5A; --sp-money:#C1962F; --sp-channel:#C0619E; --sp-art:#7A6CCF; --sp-soul:#6FA0B5; --sp-love:#D2565E; --sp-life:#E39A42; --sp-x:#B5873C;
   --f-display:'Unbounded','Manrope',system-ui,sans-serif;
   --f-body:'Manrope',system-ui,-apple-system,'Segoe UI',sans-serif;
   --r:20px;
@@ -99,6 +99,12 @@ h3{font-size:15px;font-weight:700}
 .hrow.done .hn b{color:var(--muted)}
 .hn small{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);margin-top:2px}
 .hp{font-size:13px;color:var(--heart);font-weight:800;white-space:nowrap;font-variant-numeric:tabular-nums}
+.daynav{display:grid;grid-template-columns:40px minmax(0,1fr) 40px;align-items:center;gap:8px;text-align:center}
+.dn{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:var(--surface-2);color:var(--ink)}
+.dn:disabled{opacity:.3}
+.dn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.dt{display:flex;flex-direction:column;gap:1px}
+.dt b{font-weight:700;font-size:16px}
 .soon{display:flex;flex-direction:column;gap:6px;font-size:13px}
 .soon div{display:flex;gap:8px}
 .soon b{white-space:nowrap;min-width:84px}
@@ -170,13 +176,13 @@ h3{font-size:15px;font-weight:700}
 
 /* progress */
 .heat{display:grid;grid-template-columns:repeat(26,minmax(0,1fr));grid-template-rows:repeat(7,auto);grid-auto-flow:column;gap:3px}
-.heat i{aspect-ratio:1;border-radius:3px;background:var(--surface-2)}
-.heat i.l1{background:color-mix(in srgb,var(--heart) 28%,var(--surface-2))}
-.heat i.l2{background:color-mix(in srgb,var(--heart) 52%,var(--surface-2))}
-.heat i.l3{background:color-mix(in srgb,var(--heart) 76%,var(--surface-2))}
-.heat i.l4{background:var(--heart)}
-.heat i.t{outline:1.5px solid var(--ink);outline-offset:1px}
-.heat i.f{opacity:.35}
+.heat .c{display:block;width:100%;aspect-ratio:1;border-radius:3px;background:var(--surface-2)}
+.heat .c.l1{background:color-mix(in srgb,var(--heart) 28%,var(--surface-2))}
+.heat .c.l2{background:color-mix(in srgb,var(--heart) 52%,var(--surface-2))}
+.heat .c.l3{background:color-mix(in srgb,var(--heart) 76%,var(--surface-2))}
+.heat .c.l4{background:var(--heart)}
+.heat .c.t{outline:1.5px solid var(--ink);outline-offset:1px}
+.heat .c.f{opacity:.35}
 .legend{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--muted)}
 .legend i{width:10px;height:10px;border-radius:3px;display:inline-block}
 .mgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
@@ -248,8 +254,8 @@ const ver = v => { try { return tg && tg.isVersionAtLeast && tg.isVersionAtLeast
 const COST = 3000, SEASON = 182, KEEP = 45;
 const LEVELS = ['Начало','Пробуждение','Ритм','Сила','Сияние','Новая я','Неузнаваемая'];
 const SPH = {
-  body:'Тело', beauty:'Красота', health:'Здоровье', mind:'Английский и книги', italy:'Италия',
-  money:'Деньги и карьера', channel:'Канал', soul:'Душа', love:'Близкие', life:'Яркость жизни'
+  body:'Тело', beauty:'Красота', health:'Здоровье', mind:'Знания', italy:'Переезд в Италию',
+  money:'Деньги и карьера', channel:'Канал', soul:'Душа', love:'Близкие', life:'Яркость жизни', art:'Творчество и хобби'
 };
 const ITEMS = {outfit:'Гардероб', glasses:'Очки', wallet:'Miu Miu', laptop:'Компьютер', perfume:'Духи', watch:'Часы', gift:'Подарок'};
 const ICON = {
@@ -283,7 +289,7 @@ const DEF_H = [
   {id:'skin_pm', n:'Уход за кожей вечером', s:'beauty', h:3, from:1},
   {id:'retainer', n:'Чистка ретейнера и зубная нить', s:'health', h:3, from:1},
   {id:'read', n:'Чтение 10 страниц', s:'mind', h:5, from:2},
-  {id:'ita', n:'Итальянский · 15 мин', s:'italy', h:10, from:2},
+  {id:'ita', n:'Итальянский · 15 мин', s:'mind', h:10, from:2},
   {id:'plan', n:'Спланировать завтрашний день', s:'soul', h:3, from:3},
   {id:'steps6', n:'6 000 шагов', s:'body', h:5, from:3, to:8},
   {id:'workout', n:'Тренировка', s:'body', h:15, from:4, pw:3},
@@ -330,13 +336,13 @@ const DEF_Q = [
   Q('e_pass','Сдать IELTS','mind',1500,{tier:'boss'}),
   Q('e_75','IELTS 7.5','mind',1000,{tier:'legend'}),
 
-  Q('i_course','Итальянский: курс или преподаватель','italy',100),
-  Q('i_50','50 уроков итальянского','italy',500),
-  Q('i_a2','Итальянский A2','italy',800),
+  Q('i_course','Итальянский: курс или преподаватель','mind',100),
+  Q('i_50','50 уроков итальянского','mind',500),
+  Q('i_a2','Итальянский A2','mind',800),
   Q('i_prog','Выбрать 3–5 программ и узнать дедлайны','italy',300),
   Q('i_letter','Мотивационное письмо','italy',300),
   Q('i_docs','Документы: переводы и легализация','italy',400),
-  Q('i_b1','Итальянский B1','italy',1200,{tier:'boss'}),
+  Q('i_b1','Итальянский B1','mind',1200,{tier:'boss'}),
   Q('i_apply','Подать заявку в университет','italy',1000,{tier:'boss'}),
   Q('i_in','Поступление','italy',2000,{tier:'legend'}),
 
@@ -368,9 +374,11 @@ const DEF_Q = [
   Q('l_fr','Поездка с подругами','love',500),
 
   Q('j_act','Новая активность','life',100,{rep:1,max:10}),
-  Q('j_page','Страница комикса','life',80,{rep:1,max:10}),
+  Q('j_page','Страница комикса','art',80,{rep:1,max:10}),
   Q('j_concert','Концерт','life',150),
-  Q('j_comic','Комикс на 10 страниц','life',800,{tier:'boss'}),
+  Q('j_comic','Комикс на 10 страниц','art',800,{tier:'boss'}),
+  Q('a_puzzle','Собрать пазл','art',150,{rep:1}),
+  Q('a_canvas','Нарисовать картину на холсте','art',200,{rep:1}),
   Q('j_country','Новая страна','life',700,{rep:1,max:2,tier:'boss'})
 ];
 const DEF_R = [
@@ -417,7 +425,7 @@ let S = null;
 const UI = {tab:'today', qf:'all', qv:'open'};
 
 function fresh(){
-  return {v:2, start:isoOf(new Date()), savedAt:0, theme:'auto',
+  return {v:3, start:isoOf(new Date()), savedAt:0, theme:'auto',
     habits:clone(DEF_H), quests:clone(DEF_Q), rewards:clone(DEF_R), metrics:clone(DEF_M), ielts:'',
     events:[], base:{t:0,s:{}}, days:{}, streak:{c:0,f:0,m:0}, frozen:[], lastChecked:-1, comeback:false, seen:1};
 }
@@ -478,6 +486,14 @@ function normalize(st){
     st.habits.forEach(h => { delete h.core; });
     st.v = 2;
   }
+  if (st.v < 3){
+    const mv = {i_course:'mind', i_50:'mind', i_a2:'mind', i_b1:'mind', j_page:'art', j_comic:'art'};
+    st.quests.forEach(q => { if (mv[q.id]) q.s = mv[q.id]; });
+    st.habits.forEach(h => { if (h.id === 'ita') h.s = 'mind'; });
+    ['a_puzzle','a_canvas'].forEach(id => { if (!st.quests.some(q => q.id === id)) st.quests.push(clone(DEF_Q.find(q => q.id === id))); });
+    st.events.forEach(e => { const id = String(e[1]).split(':')[1]; if (e[1] === 'h:ita') e[3] = 'mind'; else if (/^qx?:/.test(e[1]) && mv[id]) e[3] = mv[id]; });
+    st.v = 3;
+  }
   return st;
 }
 
@@ -499,15 +515,6 @@ function lvl(t){
   const n = Math.floor(Math.max(0,t)/COST) + 1;
   return {n, name: LEVELS[Math.min(n,LEVELS.length)-1] + (n > LEVELS.length ? ' +' + (n-LEVELS.length) : ''), cur: t - (n-1)*COST};
 }
-function prune(){
-  const cut = T() - KEY_DAYS();
-  if (!S.events.some(e => e[0] < cut)) return;
-  S.events = S.events.filter(e => {
-    if (e[0] >= cut) return true;
-    S.base.t += e[2]; S.base.s[e[3]] = (S.base.s[e[3]]||0) + e[2]; return false;
-  });
-}
-const KEY_DAYS = () => KEEP;
 
 /* ---------- привычки, серия ---------- */
 const week = d => Math.floor(d/7);
@@ -518,37 +525,23 @@ function minDone(d){
   return act.filter(h => hasEv(d, 'h:'+h.id)).length >= minNeed(d);
 }
 const toasts = [];
-function rollover(){
-  const t = T(); let changed = false;
-  for (let d = S.lastChecked + 1; d < t; d++){
-    changed = true;
-    if (d < 0) continue;
+function recalc(){
+  const t = T(), old = S.lastChecked;
+  S.events = S.events.filter(e => !/^b:(s7|s30|cb):/.test(e[1]));
+  S.days = {}; for (const e of S.events) S.days[e[0]] = (S.days[e[0]]||0) + e[2];
+  let c = 0, f = 0, m = 0; const fr = [];
+  const msg = (d, text) => { if (d > old) toasts.push(text); };
+  for (let d = 0; d < t; d++){
     if (minDone(d)){
-      S.streak.c++; S.streak.m = 0; S.comeback = false;
-      if (S.streak.c % 7 === 0){
-        S.streak.f = Math.min(2, S.streak.f + 1);
-        addEv(d, 'b:s7:'+d, 50, 'x');
-        toasts.push('Серия ' + S.streak.c + ' ' + plural(S.streak.c,'день','дня','дней') + ': +50 💗 и заморозка');
-      }
-      if (S.streak.c % 30 === 0){ addEv(d, 'b:s30:'+d, 300, 'x'); toasts.push('30 дней подряд: +300 💗'); }
-    } else if (S.streak.c > 0 && S.streak.f > 0){
-      S.streak.f--; S.frozen.push(d);
-      toasts.push('Заморозка спасла серию за ' + dShort(d));
-    } else {
-      if (S.streak.c > 0) toasts.push('Серия прервалась. Начинаем заново, без минусов');
-      S.streak.c = 0; S.streak.m++;
-      if (S.streak.m >= 3) S.comeback = true;
-    }
+      if (m >= 3) addEv(d, 'b:cb:'+d, 100, 'x');
+      c++; m = 0;
+      if (c % 7 === 0){ f = Math.min(2, f+1); addEv(d, 'b:s7:'+d, 50, 'x'); msg(d, 'Серия ' + c + ' ' + plural(c,'день','дня','дней') + ': +50 💗 и заморозка'); }
+      if (c % 30 === 0){ addEv(d, 'b:s30:'+d, 300, 'x'); msg(d, '30 дней подряд: +300 💗'); }
+    } else if (c > 0 && f > 0){ f--; fr.push(d); msg(d, 'Заморозка спасла серию за ' + dShort(d)); }
+    else { if (c > 0) msg(d, 'Серия прервалась. Начинаем заново, без минусов'); c = 0; m++; }
   }
-  if (t - 1 > S.lastChecked) S.lastChecked = t - 1;
-  S.frozen = S.frozen.filter(d => d >= t - 60);
-  prune();
-  if (changed) save();
-}
-function checkToday(){
-  const t = T(), key = 'b:cb:'+t, ok = minDone(t), has = hasEv(t, key);
-  if (S.comeback && ok && !has){ addEv(t, key, 100, 'x'); toast('Возвращение засчитано: +100 💗'); }
-  else if (!ok && has) rmLast(e => e[1] === key);
+  if (m >= 3 && minDone(t)) addEv(t, 'b:cb:'+t, 100, 'x');
+  S.streak = {c, f, m}; S.frozen = fr; S.comeback = m >= 3; S.lastChecked = t - 1;
 }
 function minNeed(d){ return Math.min(4, S.habits.filter(h => hActive(h,d)).length); }
 function streakNow(){ return S.streak.c + (minDone(T()) ? 1 : 0); }
@@ -601,7 +594,7 @@ function avatar(o){
 /* ---------- рендер ---------- */
 function render(){
   const day = T();
-  if (UI.lastDay !== day){ UI.lastDay = day; rollover(); checkToday(); }
+  if (UI.lastDay !== day){ UI.lastDay = day; UI.sel = day; recalc(); save(); }
   $('#nav').innerHTML = NAV.map(n => `<button data-a="tab" data-t="${n[0]}" ${UI.tab===n[0] ? 'aria-current="page"' : ''}><svg viewBox="0 0 24 24" aria-hidden="true">${n[2]}</svg>${n[1]}</button>`).join('');
   const v = {today:vToday, quests:vQuests, me:vMe, rewards:vRewards, progress:vProgress}[UI.tab]();
   $('#app').innerHTML = `<div class="view">${v}</div>`;
@@ -612,17 +605,19 @@ function sad(){ const t = T(); return S.comeback && !hasEv(t, 'b:cb:'+t); }
 
 function vToday(){
   const t = T(), now = new Date(), tot = totals().t, L = lvl(tot);
-  const act = S.habits.filter(h => hActive(h,t));
-  const done = act.filter(h => hasEv(t,'h:'+h.id)).length;
+  const d = Math.max(0, Math.min(UI.sel == null ? t : UI.sel, t)), past = d < t, dd = dateOf(d);
+  const doneT = S.habits.filter(h => hActive(h,t) && hasEv(t,'h:'+h.id)).length;
+  const act = S.habits.filter(h => hActive(h,d));
+  const done = act.filter(h => hasEv(d,'h:'+h.id)).length;
   const today = S.days[t] || 0;
   const st = streakNow();
   const ok = minDone(t), need = minNeed(t);
   // привычки
   const rows = act.map(h => {
-    const isDone = hasEv(t,'h:'+h.id);
+    const isDone = hasEv(d,'h:'+h.id);
     let sub = `<span class="dot" style="--c:var(--sp-${h.s})"></span>${esc(SPH[h.s]||'')}`;
     if (h.pw){
-      let c = 0; for (let d = week(t)*7; d <= t; d++) if (hasEv(d,'h:'+h.id)) c++;
+      let c = 0; for (let x = week(d)*7; x < week(d)*7 + 7 && x <= t; x++) if (hasEv(x,'h:'+h.id)) c++;
       sub += ` · ${c} из ${h.pw} на этой неделе`;
     }
     return `<button class="hrow ${isDone?'done':''}" data-a="hab" data-id="${esc(h.id)}" aria-pressed="${isDone}">
@@ -649,14 +644,19 @@ function vToday(){
     </div>
   </div>
   <div class="stats">
-    <button class="stat fire" data-a="streak" aria-label="Как работает серия">${svgI('fire')}серия ${st} ${plural(st,'день','дня','дней')}${ok ? ' ✓' : ` · ${Math.min(done,need)}/${need}`}</button>
+    <button class="stat fire" data-a="streak" aria-label="Как работает серия">${svgI('fire')}серия ${st} ${plural(st,'день','дня','дней')}${ok ? ' ✓' : ` · ${Math.min(doneT,need)}/${need}`}</button>
     <span class="stat frost" title="Заморозки">${svgI('frost')}${S.streak.f} из 2</span>
     <span class="stat">+${fmt(today)} 💗 сегодня</span>
     ${ielts}
   </div>
   ${sad() ? `<div class="banner"><b>Возвращение.</b> Выполни сегодня ${need} ${plural(need,'привычку','привычки','привычек')} и получи +100 💗. Без упрёков, просто продолжаем.</div>` : ''}
   <section class="card stack">
-    <div class="between"><h3>Привычки</h3><span class="small muted num">${done} из ${act.length}</span></div>
+    <div class="daynav">
+      <button class="dn" data-a="day" data-v="-1" ${d<=0?'disabled':''} aria-label="Предыдущий день"><svg viewBox="0 0 24 24"><path d="m14.5 6-6 6 6 6"/></svg></button>
+      <div class="dt"><b>${past ? dd.getDate()+' '+MON[dd.getMonth()] : 'Сегодня'}</b><span class="small muted num">${past ? WDF[dd.getDay()]+' · ' : ''}${done} из ${act.length} привычек</span></div>
+      <button class="dn" data-a="day" data-v="1" ${past?'':'disabled'} aria-label="Следующий день"><svg viewBox="0 0 24 24"><path d="m9.5 6 6 6-6 6"/></svg></button>
+    </div>
+    ${past ? `<div class="banner small">Отмечаешь прошлый день. Сердечки и серия пересчитаются сами. <button class="linkbtn" data-a="day-today" style="padding:0">Вернуться к сегодня</button></div>` : ''}
     <div class="list">${rows || '<p class="muted small">Пока нет активных привычек.</p>'}</div>
   </section>
   ${soon ? `<section class="card stack"><h3>Скоро откроется</h3><div class="soon">${soon}</div><p class="small muted">Новые привычки добавляются постепенно, чтобы не перегрузиться.</p></section>` : ''}
@@ -765,7 +765,7 @@ function vProgress(){
   for (let d = 0; d < SEASON; d++){
     const h = S.days[d] || 0;
     const l = h <= 0 ? '' : h < 20 ? 'l1' : h < 45 ? 'l2' : h < 70 ? 'l3' : 'l4';
-    cells += `<i class="${l}${d===t?' t':''}${d>t?' f':''}" title="${dShort(d)}: ${fmt(h)} 💗"></i>`;
+    cells += `<button class="c ${l}${d===t?' t':''}${d>t?' f':''}" data-a="day-open" data-d="${d}" aria-label="${dShort(d)}: ${fmt(h)} сердечек"></button>`;
   }
   const active = Object.keys(S.days).filter(k => S.days[k] > 0).length;
   const ms = Object.keys(S.metrics).map(k => {
@@ -788,7 +788,7 @@ function vProgress(){
   </section>
   <button class="card" data-a="ielts-open" style="text-align:left">${cd}</button>
   <div class="mgrid">${ms}</div>
-  <p class="small muted">Нажми на карточку, чтобы добавить новое значение или поменять цель.</p>`;
+  <p class="small muted">Нажми на день в календаре, чтобы увидеть, что ты сделала. Нажми на карточку, чтобы добавить новое значение или поменять цель.</p>`;
 }
 
 /* ---------- листы ---------- */
@@ -824,6 +824,25 @@ function sheetStreak(){
       <p>Пропуск не отнимает сердечки. После 3 пустых дней подряд появится квест «Возвращение» на +100 💗.</p>
     </div>
     <button class="btn wide" data-a="close">Понятно</button>`);
+}
+function evName(k){
+  const p = String(k).split(':'), id = p[1];
+  if (p[0] === 'h'){ const h = S.habits.find(x => x.id === id); return h ? h.n : 'Привычка (удалена)'; }
+  if (p[0] === 'q'){ const q = quest(id); return q ? q.n : 'Квест (удалён)'; }
+  if (p[0] === 'qx'){ const q = quest(id); return 'Отмена: ' + (q ? q.n : 'квест'); }
+  return id === 's7' ? 'Бонус за 7 дней серии' : id === 's30' ? 'Бонус за 30 дней серии' : id === 'cb' ? 'Возвращение после паузы' : 'Бонус';
+}
+function sheetDay(d){
+  const t = T(); if (d > t) return toast('Этот день ещё впереди');
+  const ev = S.events.filter(e => e[0] === d), dd = dateOf(d);
+  const groups = [['Привычки', ev.filter(e => /^h:/.test(e[1]))], ['Квесты', ev.filter(e => /^qx?:/.test(e[1]))], ['Бонусы', ev.filter(e => !/^(h|qx?):/.test(e[1]))]];
+  const status = minDone(d) ? 'серия засчитана' : d === t ? 'день ещё идёт' : S.frozen.includes(d) ? 'спасён заморозкой' : 'серия не засчитана';
+  let body = groups.filter(g => g[1].length).map(g => `<div class="stack" style="gap:8px"><span class="eyebrow">${g[0]} · ${g[1].length}</span><div class="hist">${g[1].map(e =>
+    `<div><span class="row" style="gap:8px;min-width:0"><span class="dot" style="--c:var(--sp-${SPH[e[3]] ? e[3] : 'x'})"></span>${esc(evName(e[1]))}</span><b class="num" style="color:var(--heart);white-space:nowrap">${e[2] > 0 ? '+' : ''}${fmt(e[2])} 💗</b></div>`).join('')}</div></div>`).join('');
+  if (!body) body = '<p class="muted">В этот день ничего не отмечено.</p>';
+  openSheet(`<div class="stack" style="gap:2px"><h2>${dd.getDate()} ${MON[dd.getMonth()]}</h2><span class="small muted">${WDF[dd.getDay()]} · ${status} · +${fmt(S.days[d]||0)} 💗</span></div>
+    ${body}
+    <button class="btn wide ghost" data-a="day-edit" data-d="${d}">${d === t ? 'Открыть сегодня' : 'Отметить привычки за этот день'}</button>`);
 }
 function sheetHabits(){
   const t = T();
@@ -911,7 +930,7 @@ function fx(text, ev){
   el.style.left = Math.min(innerWidth-40, Math.max(40, x)) + 'px'; el.style.top = (y - 18) + 'px';
   document.body.appendChild(el); setTimeout(() => el.remove(), 1000);
 }
-function after(){ checkToday(); checkLevel(); save(); render(); }
+function after(){ const t = T(), had = hasEv(t, 'b:cb:'+t); recalc(); if (!had && hasEv(t, 'b:cb:'+t)) toast('Возвращение засчитано: +100 💗'); checkLevel(); save(); render(); }
 
 /* ---------- действия ---------- */
 function completeQuest(q, ev){
@@ -942,11 +961,15 @@ const A = {
   tab(b){ UI.tab = b.dataset.t; closeSheet(); render(); scrollTo(0,0); },
   hab(b, ev){
     const h = S.habits.find(x => x.id === b.dataset.id); if (!h) return;
-    const t = T(), key = 'h:'+h.id;
+    const t = Math.min(UI.sel == null ? T() : UI.sel, T()), key = 'h:'+h.id;
     if (hasEv(t, key)) { rmLast(e => e[0]===t && e[1]===key); haptic('light'); }
     else { addEv(t, key, h.h, h.s); fx('+'+h.h+' 💗', ev); haptic('medium'); }
     after();
   },
+  day(b){ UI.sel = Math.max(0, Math.min(T(), (UI.sel == null ? T() : UI.sel) + (+b.dataset.v))); haptic('light'); render(); },
+  'day-today'(){ UI.sel = T(); render(); },
+  'day-open'(b){ sheetDay(+b.dataset.d); },
+  'day-edit'(b){ UI.sel = +b.dataset.d; UI.tab = 'today'; closeSheet(); render(); scrollTo(0,0); },
   'q-do'(b, ev){ const q = quest(b.dataset.id); if (q){ completeQuest(q, ev); after(); } },
   'q-open'(b){ sheetQuest(b.dataset.id); },
   'q-new'(){ sheetQuest(null); },
